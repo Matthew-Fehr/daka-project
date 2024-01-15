@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Nueva propiedad</title>
+    {% extends 'base.html' %}
+    {% block content %}
+    <style>
+        .carousel-foto {
+            display: flex;
+            object-fit: contain;
+            border-radius: 8px;
+            height: 100%;
+            max-height: 300px;
+        }
+
+        #demo {
+            height: 300px;
+            max-height: 300px;
+        }
+
+    </style>
+    <script>
+        function previewMultiple(event) {
+            const files = event.target.files;
+            const uploadCarousel = document.getElementById('uploadCarousel');
+            uploadCarousel.innerHTML = '';
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+
+                const carouselItem = document.createElement('div');
+                carouselItem.classList.add('carousel-item');
+                if (i === 0) {
+                    carouselItem.classList.add('active');
+                }
+
+                const img = document.createElement('img');
+                img.src = URL.createObjectURL(file);
+                img.alt = file.name;
+                img.classList.add('d-block', 'mx-auto', 'img-fluid', 'carousel-foto');
+
+                carouselItem.appendChild(img);
+                uploadCarousel.appendChild(carouselItem);
+            }
+        }
+    </script>
+</head>
+
+<body>
+<h1 class="h1">Formulario de Inmobiliaria</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-md">
+            <label for="title_de" class="col-form-label">Titulo en Alemán:</label>
+            <input required type="text" id="title_de" name="title_de" class="form-control">
+            <label for="description_de" class="col-form-label">Descripción en Alemán:</label>
+            <textarea required id="description_de" name="description_de" class="form-control" rows="4"></textarea>
+        </div>
+        <div class="col-md">
+            <label for="title_es" class="col-form-label">Titulo en Español:</label>
+            <input required type="text" id="title_es" name="title_es" class="form-control">
+            <label for="description_es" class="col-form-label">Descripción en Español:</label>
+            <textarea required id="description_es" name="description_es" class="form-control" rows="4"
+            ></textarea>
+        </div>
+        <div class="col-md">
+            <label for="title_en" class="col-form-label">Titulo en Inglés:</label>
+            <input required type="text" id="title_en" name="title_en" class="form-control">
+            <label for="description_en" class="col-form-label">Descripción en Inglés:</label>
+            <textarea required id="description_en" name="description_en" class="form-control" rows="4"
+            ></textarea>
+        </div>
+    </div>
+    <div id="demo" class="carousel slide bg-gradient flex-fill" data-bs-ride="carousel"
+         style="margin-top: 1rem; margin-bottom: 1rem">
+        <!-- The slideshow/carousel -->
+        <div class="carousel-inner" id="uploadCarousel">
+            <div class="carousel-item active">
+                <img src="https://placehold.co/1920x1080" alt="Placeholder"
+                     class="d-block mx-auto img-fluid carousel-foto"
+                >
+            </div>
+        </div>
+        <!-- Left and right controls/icons -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
+            <span class="carousel-control-next-icon"></span>
+        </button>
+    </div>
+    <input type="file" id="image_url" name="image_url" accept="image/*" class="form-control" multiple
+           onchange="previewMultiple(event)">
+    <div class="col-auto">
+        <label for="location" class="col-form-label">Ubicación:</label>
+        <input type="text" id="location" name="location" class="form-control">
+    </div>
+    <div class="col-auto">
+        <label for="google_maps" class="col-form-label">Link en Google Maps:</label>
+        <input type="url" id="google_maps" name="google_maps" class="form-control">
+    </div>
+    <div class="col-md-2">
+        <label for="type" class="col-form-label">Tipo de inmobiliaria:</label>
+        <select id="type" name="type" class="form-select">
+            <option value="lot" selected>Lote</option>
+            <option value="house">Casa</option>
+            <option value="commercial">Negocio</option>
+            <option value="ranch">Estancia</option>
+        </select>
+    </div>
+    <label for="area" class="col-form-label">Superficie:</label>
+    <div class="input-group">
+        <div class="col-3">
+            <input type="number" id="area" name="area" class="form-control" placeholder=0>
+        </div>
+        <div class="col-xl-1">
+            <select id="area_unit" name="area_unit" class="form-select">
+                <option value="sqmeter" selected>m²</option>
+                <option value="hectar">ha</option>
+            </select>
+        </div>
+    </div>
+    <label for="price" class="col-form-label">Precio:</label>
+    <div class="input-group">
+        <div class="col-3">
+            <input type="number" id="price" name="price" class="form-control" placeholder=0>
+        </div>
+        <div class="col-xl-1">
+            <select id="currency" name="currency" class="form-select">
+                <option value="grs" selected>Grs</option>
+                <option value="usd">USD</option>
+            </select>
+        </div>
+        <div class="col-xl-1">
+            <select id="price_unit" name="price_unit" class="form-select">
+                <option value="total" selected>Total</option>
+                <option value="sqmeter">/m²</option>
+                <option value="hectar">/ha</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <label for="status" class="col-form-label">Estado:</label>
+        <select id="status" name="status" class="form-select">
+            <option value="available" selected>Disponible</option>
+            <option value="sold">Vendido</option>
+            <option value="unavailable">No disponible</option>
+        </select>
+    </div>
+    <div class="col-md-5">
+        <label for="expiration" class="col-form-label">Fecha vencimiento del contrato:</label>
+        <input type="date" id="expiration" name="expiration" class="form-control">
+    </div>
+    <br>
+    <div id="selected-images"></div>
+    <br>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</form>
+</body>
+{% endblock %}
+</html>

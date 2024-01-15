@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+{% extends 'base.html' %}
+{% block content %}
+<head>
+    <title>Subir imágenes a la propiedad</title>
+    <script>
+        function previewMultiple(event) {
+            const files = event.target.files;
+            const formInput = document.getElementById('image_url');
+            formInput.files = files;
+        }
+    </script>
+</head>
+<body>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+<h1 class="h1">Subir imágenes</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <input type="file" id="image_url" name="image_url" accept="image/*" class="form-control" multiple
+           onchange="previewMultiple(event)">
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</form>
+<br>
+</body>
+{% endblock %}
+</html>

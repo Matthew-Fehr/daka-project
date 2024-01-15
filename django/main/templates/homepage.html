@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<html lang="es">
+<title>Inmobiliaria Daka</title>
+<head>
+    <meta charset="UTF-8">
+    <title>This is the homepage of the Backend using Django</title>
+</head>
+<body>
+<h1>INMOBILIARIA DAKA E.A.S.</h1>
+<img src="{% static 'images/homepage_main.png' %}" alt="Logo DAKA" width="128" height="128">
+<p>This is the homepage of the Backend using Django.</p>
+<p>Esta página es donde se va agregar y gestionar las ofertas de la empresa.</p>
+
+</body>
+{% endblock %}

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<title>Propiedades</title>
+<script>
+    function valueUnit(value) {
+        switch (value) {
+            case 'sqmeter':
+                return 'por metro cuadrado'
+            case 'total':
+                return ' '
+            case 'hectar':
+                return 'por hectarea'
+        }
+    }
+</script>
+<head>
+    <style>
+        .property-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        @media only screen and (max-width: 768px) {
+            .property-item {
+                margin-bottom: 20px;
+                padding: 20px;
+                background-color: #fafafa;
+                border-radius: 4px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .property-thumbnail {
+                min-width: 50vw;
+                margin-bottom: 2vh;
+            }
+        }
+
+        @media only screen and (min-width: 768px) {
+            .property-item {
+                margin-bottom: 20px;
+                padding: 20px;
+                background-color: #fafafa;
+                border-radius: 4px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                max-height: 30vh;
+            }
+        }
+
+        .property-thumbnail img {
+            max-height: inherit;
+            max-width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .property {
+            max-height: 20vh;
+        }
+
+    </style>
+</head>
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+
+<h1>Property Listing</h1>
+<ul class="property-list">
+    {% for property in properties %}
+    <br>
+    <li class="property-item">
+        <div class="row" style="max-height:10%">
+            <div class="property-thumbnail property col-sm-2">
+                {% if property.images.all %}
+                <img class="row" src="/manage/media/{{ property.images.first.image_url}}" alt="Property Image"
+                >
+                {% else %}
+                <img src="{% static 'images/house.png' %}" alt="Placeholder Image">
+                {% endif %}
+            </div>
+            <div class="property-details property col-md-8" style="padding: 0;">
+                <h2>{{ property.title_es }}</h2>
+                <p>{{ property.location }}</p>
+                <p>Precio: {{ property.price|floatformat:"0"|intcomma:"." }} {{ property.currency}}
+                    {{property.price_unit}}</p>
+            </div>
+            <div class="container-fluid col-sm-2" style="align-self: center; align-content: end">
+                <div class="row row-gap-md-3 justify-content-center" style="max-width: 100%">
+                    <a class="btn btn-primary" href="{% url 'edit-property' property.id %}">Editar</a>
+                    <a class="delete-button btn btn-danger col"
+                       href="{% url 'delete-property' property.id %}">Eliminar</a>
+                </div>
+            </div>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

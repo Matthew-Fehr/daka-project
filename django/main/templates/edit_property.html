@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+{% extends 'base.html' %}
+{% block content %}
+<body>
+<h1 class="h1">Editar Inmobiliaria</h1>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="row">
+        <div class="col-md">
+            <div class="form-group">
+                <label for="title_de" class="col-form-label">Titulo en Alemán:</label>
+                <input required type="text" id="title_de" name="title_de" class="form-control"
+                       value="{{ form.title_de.value }}">
+            </div>
+            <div class="form-group">
+                <label for="description_de" class="col-form-label">Descripción en Alemán:</label>
+                <textarea required id="description_de" name="description_de" class="form-control" rows="4">{{ form.description_de.value }}</textarea>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="form-group">
+                <label for="title_es" class="col-form-label">Titulo en Español:</label>
+                <input required type="text" id="title_es" name="title_es" class="form-control"
+                       value="{{ form.title_es.value }}">
+            </div>
+            <div class="form-group">
+                <label for="description_es" class="col-form-label">Descripción en Español:</label>
+                <textarea required id="description_es" name="description_es" class="form-control" rows="4">{{ form.description_es.value }}</textarea>
+            </div>
+        </div>
+        <div class="col-md">
+            <div class="form-group">
+                <label for="title_en" class="col-form-label">Titulo en Ingles:</label>
+                <input required type="text" id="title_en" name="title_en" class="form-control"
+                       value="{{ form.title_en.value }}">
+            </div>
+            <div class="form-group">
+                <label for="description_en" class="col-form-label">Descripción en Ingles:</label>
+                <textarea required id="description_en" name="description_en" class="form-control" rows="4">{{ form.description_en.value }}</textarea>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="location" class="col-form-label">Ubicación:</label>
+        <input type="text" id="location" name="location" class="form-control" value="{{ form.location.value }}">
+    </div>
+    <div class="form-group">
+        <label for="google_maps" class="col-form-label">Link en Google Maps:</label>
+        <input type="text" id="google_maps" name="google_maps" class="form-control"
+               value="{{ form.google_maps.value }}">
+    </div>
+    <div class="form-group">
+        <label for="type" class="col-form-label">Tipo de inmobiliaria:</label>
+        <select id="type" name="type" class="form-control">
+            {% for choice in form.type.field.choices %}
+            {% if choice.0 == form.type.value %}
+            <option value="{{ choice.0 }}" selected>{{ choice.1 }}</option>
+            {% else %}
+            <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+            {% endif %}
+            {% endfor %}
+        </select>
+    </div>
+    <label for="area" class="col-form-label">Superficie:</label>
+    <div class="input-group">
+        <div class="col-3">
+            <input type="number" id="area" name="area" class="form-control" placeholder="0"
+                   value='{{ form.area.value|floatformat:"0" }}'>
+        </div>
+        <div class="col-xl-1">
+            <select id="area_unit" name="area_unit" class="form-select">
+                {% for choice in form.area_unit.field.choices %}
+                {% if choice.0 == form.area_unit.value %}
+                <option value="{{ choice.0 }}" selected>{{ choice.1 }}</option>
+                {% else %}
+                <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <label for="price" class="col-form-label">Precio:</label>
+    <div class="input-group">
+        <div class="col-3">
+            <input type="number" id="price" name="price" class="form-control" placeholder="0"
+                   value='{{ form.price.value|floatformat:"0"}}'>
+        </div>
+        <div class="col-xl-1">
+            <select id="currency" name="currency" class="form-select">
+                {% for choice in form.currency.field.choices %}
+                {% if choice.0 == form.currency.value %}
+                <option value="{{ choice.0 }}" selected>{{ choice.1 }}</option>
+                {% else %}
+                <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-xl-1">
+            <select id="price_unit" name="price_unit" class="form-select">
+                {% for choice in form.price_unit.field.choices %}
+                {% if choice.0 == form.price_unit.value %}
+                <option value="{{ choice.0 }}" selected>{{ choice.1 }}</option>
+                {% else %}
+                <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+                {% endif %}
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <label for="status" class="col-form-label">Estado:</label>
+        <select id="status" name="status" class="form-select">
+            {% for choice in form.status.field.choices %}
+            {% if choice.0 == form.status.value %}
+            <option value="{{ choice.0 }}" selected>{{ choice.1 }}</option>
+            {% else %}
+            <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+            {% endif %}
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-md-5">
+        <label for="expiration" class="col-form-label">Fecha vencimiento del contrato:</label>
+        <label for="expiration" class="col-form-label">{{form.expiration.value|date:'D d/M/Y'}}</label>
+        <input type="date" id="expiration" name="expiration" class="form-control"
+               value={{form.expiration.value|date:'Y-m-d'}}>
+    </div>
+
+
+    <br>
+    <!-- Display existing images -->
+    <h2>Imágenes existentes:</h2>
+    {% for image in form.instance.images.all %}
+    <img src="{{ image.image_url.url }}" alt="Image" width="200">
+    {% empty %}
+    <p>No existen imágenes asociadas.</p>
+    {% endfor %}
+    <input type="file" id="image_url" name="image_url" accept="image/*" class="form-control" multiple
+           onchange="previewMultiple(event)">
+    <h6 style="font-size: 0.8rem; margin: 0.2rem 0.4rem; color: #9C1A1C">AVISO: Al subir una imágen, va reemplazar todas
+        las
+        imágenes existentes</h6>
+    <br>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+</form>
+<br>
+</body>
+{% endblock %}
+</html>
