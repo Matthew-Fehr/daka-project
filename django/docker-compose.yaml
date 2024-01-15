@@ -1,0 +1,30 @@
+services:
+  # Django Backend service ---------------------------------------------
+  web-service:
+    build: .
+    ports:
+      - "8000:8000"
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+
+  daka-db:
+    image: postgres:15
+    container_name: daka-db
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_USER: postgres
+      POSTGRES_DB: dakaDB
+
+#  daka-db:
+#    image: postgres:15
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data/
+#    environment:
+#      - "POSTGRES_HOST_AUTH_METHOD=trust"
+
+#  volumes:
+#    postgres_data:
