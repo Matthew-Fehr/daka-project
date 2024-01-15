@@ -1,0 +1,56 @@
+version: "3.9"
+services:
+  postgres:
+    build: ./postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - inmobiliariadaka
+    # Add any volume or network settings if needed
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: inmobiliariadaka@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: D4K4inmobiliaria
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    networks:
+      - inmobiliariadaka
+
+  django:
+    build: ./django
+    ports:
+      - "8000:8000"
+    entrypoint: ./entrypoint.sh  # Use the custom entrypoint script
+    depends_on:
+      - postgres
+    networks:
+      - inmobiliariadaka
+    # Add any volume or network settings if needed
+
+  frontend:
+    build: ./react
+    ports:
+      - "3000:3000"
+    networks:
+    - inmobiliariadaka
+    # Add any volume or network settings if needed
+
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - frontend
+      - django
+    networks:
+      - inmobiliariadaka
+    # Add any volume or network settings if needed
+
+networks:
+  inmobiliariadaka:
